@@ -148,6 +148,11 @@ const Profile = () => {
     }
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/login');
+  };
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -232,6 +237,19 @@ const Profile = () => {
               onClick={() => toast.info('Settings panel coming soon')}
             >
               Settings
+            </Button>
+            <Button 
+              variant="outlined" 
+              color="error"
+              sx={{ 
+                textTransform: 'none',
+                borderRadius: 2,
+                borderColor: 'rgba(211, 47, 47, 0.5)',
+                '&:hover': { borderColor: '#d32f2f', bgcolor: 'rgba(211, 47, 47, 0.05)' }
+              }}
+              onClick={handleLogout}
+            >
+              Logout
             </Button>
           </Box>
         </Box>

@@ -40,9 +40,6 @@ const Navbar = () => {
                 <Button color="inherit" onClick={() => navigate('/profile')}>
                   Profile
                 </Button>
-                <Button variant="outlined" color="primary" onClick={handleLogout}>
-                  Logout
-                </Button>
               </>
             ) : (
               <>
