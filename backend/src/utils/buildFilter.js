@@ -14,7 +14,17 @@ const buildFilter = (queryParams) => {
     language,
     tags, // comma-separated
     after, // Date filter for createdAt (e.g. 2025-01-01)
+    search, // Search query
   } = queryParams;
+
+  if (search) {
+    filter.$or = [
+      { title: { $regex: search, $options: 'i' } },
+      { prompt: { $regex: search, $options: 'i' } },
+      { category: { $regex: search, $options: 'i' } },
+      { tags: { $regex: search, $options: 'i' } }
+    ];
+  }
 
   if (category) {
     // Case-insensitive exact match

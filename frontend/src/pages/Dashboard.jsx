@@ -37,7 +37,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await api.get('/taxonomy/categories');
+        const response = await api.get('/categories');
         setCategories(response.data.data);
       } catch {
         console.error('Failed to fetch categories');
