@@ -26,7 +26,7 @@ import {
   Grid,
   Chip
 } from '@mui/material';
-import { AccountCircle, Delete, Save, Bookmark, Note as NoteIcon } from '@mui/icons-material';
+import { AccountCircle, Delete, Save, Bookmark, Note as NoteIcon, History as HistoryIcon } from '@mui/icons-material';
 import { updateUser, logout } from '../features/auth/authSlice';
 import api from '../services/api';
 
@@ -66,6 +66,7 @@ const Profile = () => {
   // Data state
   const [bookmarks, setBookmarks] = useState([]);
   const [notes, setNotes] = useState([]);
+  const [history, setHistory] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
 
   const fetchProfile = async () => {
@@ -86,12 +87,14 @@ const Profile = () => {
   const fetchInteractionData = async () => {
     setLoadingData(true);
     try {
-      const [bookmarksRes, notesRes] = await Promise.all([
+      const [bookmarksRes, notesRes, historyRes] = await Promise.all([
         api.get('/bookmarks?limit=50'),
-        api.get('/notes?limit=50')
+        api.get('/notes?limit=50'),
+        api.get('/history?limit=50')
       ]);
       setBookmarks(bookmarksRes.data.data);
       setNotes(notesRes.data.data);
+      setHistory(historyRes.data.data);
     } catch (error) {
       console.error('Failed to fetch interactions', error);
     } finally {
@@ -261,6 +264,7 @@ const Profile = () => {
           <Tabs value={tabValue} onChange={handleTabChange} aria-label="profile tabs">
             <Tab icon={<Bookmark sx={{ mr: 1 }} />} iconPosition="start" label="Bookmarks" />
             <Tab icon={<NoteIcon sx={{ mr: 1 }} />} iconPosition="start" label="Notes" />
+            <Tab icon={<HistoryIcon sx={{ mr: 1 }} />} iconPosition="start" label="History" />
           </Tabs>
         </Box>
 
@@ -314,6 +318,39 @@ const Profile = () => {
                       </Box>
                       <Typography variant="body2" sx={{ whiteSpace: 'pre-wrap' }}>
                         {note.content}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </CustomTabPanel>
+
+        {/* History Tab */}
+        <CustomTabPanel value={tabValue} index={2}>
+          {loadingData ? (
+            <CircularProgress size={30} />
+          ) : history.length === 0 ? (
+            <Typography color="text.secondary">No viewing history found.</Typography>
+          ) : (
+            <Grid container spacing={3}>
+              {history.map((item) => (
+                <Grid item xs={12} sm={6} key={item._id}>
+                  <Card 
+                    variant="outlined" 
+                    sx={{ cursor: 'pointer', '&:hover': { borderColor: 'primary.main' } }}
+                    onClick={() => navigate(`/concepts/${item.conceptId?._id}`)}
+                  >
+                    <CardContent>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                        <Typography variant="h6" noWrap sx={{ maxWidth: '70%' }}>
+                          {item.conceptId?.title || 'Unknown Concept'}
+                        </Typography>
+                        <Chip label={item.conceptId?.category || 'General'} size="small" variant="outlined" />
+                      </Box>
+                      <Typography variant="caption" color="text.secondary">
+                        Viewed on {new Date(item.viewedAt).toLocaleDateString()} at {new Date(item.viewedAt).toLocaleTimeString()}
                       </Typography>
                     </CardContent>
                   </Card>

@@ -161,6 +161,7 @@ app.use('/api/v1/analytics', analyticsRoutes);
 app.use('/api/v1/bookmarks', bookmarkRouter);
 app.use('/api/v1/notes', noteRouter);
 app.use('/api/v1/votes', voteRouter);
+app.use('/api/v1/history', historyRouter);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1', systemRoutes); // For health and system
 

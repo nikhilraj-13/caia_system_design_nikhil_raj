@@ -54,6 +54,17 @@ const getTopVoted = async (req, res) => {
   return sendResponse(res, 200, true, 'Top voted concepts fetched', data);
 };
 
+// HISTORY
+const recordHistory = async (req, res) => {
+  const data = await interactionService.recordHistory(req.user._id, req.params.conceptId);
+  return sendResponse(res, 200, true, 'History recorded', data);
+};
+
+const getUserHistory = async (req, res) => {
+  const result = await interactionService.getUserHistory(req.user._id, req.query);
+  return sendResponse(res, 200, true, 'History fetched successfully', result.data, result.pagination);
+};
+
 module.exports = {
   toggleBookmark,
   removeBookmark,
@@ -64,5 +75,7 @@ module.exports = {
   updateNote,
   deleteNote,
   toggleVote,
-  getTopVoted
+  getTopVoted,
+  recordHistory,
+  getUserHistory
 };

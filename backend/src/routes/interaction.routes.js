@@ -28,8 +28,15 @@ const voteRouter = express.Router();
 voteRouter.get('/top', asyncWrapper(interactionController.getTopVoted)); // public or protected? The spec doesn't say protected. Let's make it public.
 voteRouter.post('/:conceptId', protect, asyncWrapper(interactionController.toggleVote));
 
+// Routes to be mounted at /api/v1/history
+const historyRouter = express.Router();
+historyRouter.use(protect);
+historyRouter.get('/', asyncWrapper(interactionController.getUserHistory));
+historyRouter.post('/:conceptId', asyncWrapper(interactionController.recordHistory));
+
 module.exports = {
   bookmarkRouter,
   noteRouter,
-  voteRouter
+  voteRouter,
+  historyRouter
 };

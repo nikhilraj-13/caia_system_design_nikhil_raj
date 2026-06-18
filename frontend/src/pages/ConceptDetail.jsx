@@ -28,7 +28,9 @@ const ConceptDetail = () => {
       try {
         const response = await api.get(`/concepts/${id}`);
         setConcept(response.data.data);
+        setIsBookmarked(response.data.data.is_bookmarked);
         setLoading(false);
+        api.post(`/history/${id}`).catch(() => {});
       } catch {
         toast.error('Failed to fetch concept');
         navigate('/dashboard');

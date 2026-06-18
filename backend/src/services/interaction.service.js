@@ -1,6 +1,7 @@
 const Bookmark = require('../models/bookmark.model');
 const Note = require('../models/note.model');
 const Vote = require('../models/vote.model');
+const History = require('../models/history.model');
 const Concept = require('../models/concept.model');
 const paginate = require('../utils/paginate');
 
@@ -113,6 +114,24 @@ const getTopVoted = async () => {
   ]);
 };
 
+// HISTORY
+const recordHistory = async (userId, conceptId) => {
+  const concept = await Concept.findOne({ _id: conceptId, isDeleted: false });
+  if (!concept) throw new Error('Concept not found');
+
+  // Upsert history record
+  return await History.findOneAndUpdate(
+    { userId, conceptId },
+    { viewedAt: new Date() },
+    { upsert: true, new: true, setDefaultsOnInsert: true }
+  );
+};
+
+const getUserHistory = async (userId, reqQuery) => {
+  reqQuery.sort = '-viewedAt'; // Override default sort to be newest views first
+  return await paginate(History, { userId }, reqQuery, { path: 'conceptId', match: { isDeleted: false } });
+};
+
 module.exports = {
   toggleBookmark,
   removeBookmark,
@@ -123,5 +142,7 @@ module.exports = {
   updateNote,
   deleteNote,
   toggleVote,
-  getTopVoted
+  getTopVoted,
+  recordHistory,
+  getUserHistory
 };
