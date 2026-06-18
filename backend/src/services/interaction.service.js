@@ -37,6 +37,9 @@ const getUserBookmarks = async (userId, reqQuery) => {
 };
 
 // NOTES
+const getUserNotes = async (userId, reqQuery) => {
+  return await paginate(Note, { userId }, reqQuery, { path: 'conceptId', match: { isDeleted: false } });
+};
 const createNote = async (userId, conceptId, content) => {
   const concept = await Concept.findOne({ _id: conceptId, isDeleted: false });
   if (!concept) throw new Error('Concept not found');
@@ -114,6 +117,7 @@ module.exports = {
   toggleBookmark,
   removeBookmark,
   getUserBookmarks,
+  getUserNotes,
   createNote,
   getConceptNotes,
   updateNote,

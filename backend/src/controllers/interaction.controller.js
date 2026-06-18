@@ -17,6 +17,11 @@ const getUserBookmarks = async (req, res) => {
   return sendResponse(res, 200, true, 'Bookmarks fetched successfully', result.data, result.pagination);
 };
 
+const getUserNotes = async (req, res) => {
+  const result = await interactionService.getUserNotes(req.user._id, req.query);
+  return sendResponse(res, 200, true, 'User notes fetched successfully', result.data, result.pagination);
+};
+
 // NOTES
 const createNote = async (req, res) => {
   const data = await interactionService.createNote(req.user._id, req.params.conceptId, req.body.content);
@@ -53,6 +58,7 @@ module.exports = {
   toggleBookmark,
   removeBookmark,
   getUserBookmarks,
+  getUserNotes,
   createNote,
   getConceptNotes,
   updateNote,

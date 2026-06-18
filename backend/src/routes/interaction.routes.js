@@ -17,6 +17,7 @@ bookmarkRouter.delete('/:conceptId', asyncWrapper(interactionController.removeBo
 // Routes to be mounted at /api/v1/notes
 const noteRouter = express.Router();
 noteRouter.use(protect);
+noteRouter.get('/', asyncWrapper(interactionController.getUserNotes));
 noteRouter.post('/:conceptId', asyncWrapper(interactionController.createNote));
 noteRouter.get('/:conceptId', asyncWrapper(interactionController.getConceptNotes));
 noteRouter.patch('/:noteId', asyncWrapper(interactionController.updateNote));

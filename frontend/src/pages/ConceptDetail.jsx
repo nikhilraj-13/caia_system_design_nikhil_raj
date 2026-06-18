@@ -39,12 +39,12 @@ const ConceptDetail = () => {
 
   const handleBookmark = async () => {
     try {
-        const response = await api.post(`/actions/bookmarks/${id}`);
-        setIsBookmarked(response.data.data.bookmarked);
-        toast.success(response.data.message);
-      } catch {
-        toast.error('Action failed');
-      }
+      const response = await api.post(`/bookmarks/${id}`);
+      setIsBookmarked(response.data.data.bookmarked);
+      toast.success(response.data.message);
+    } catch {
+      toast.error('Action failed');
+    }
   };
 
   if (loading) {
