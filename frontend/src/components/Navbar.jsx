@@ -37,6 +37,9 @@ const Navbar = () => {
                 <Button color="inherit" onClick={() => navigate('/dashboard')}>
                   Dashboard
                 </Button>
+                <Button color="inherit" onClick={() => navigate('/profile')}>
+                  Profile
+                </Button>
                 <Button variant="outlined" color="primary" onClick={handleLogout}>
                   Logout
                 </Button>
